@@ -1,0 +1,75 @@
+    <div width="99%" style="text-align:right;">
+
+        <div class="btn-group">
+            
+            <button class="btn btn-default btn-xs " type="button" disabled="disabled">
+                <span class="glyphicon glyphicon-fast-backward"></span> Primeiro
+            </button>
+            <button class="btn btn-default btn-xs " type="button" disabled="disabled" >
+                <span class="glyphicon glyphicon-step-backward"></span> Anterior
+            </button>
+
+            <button class="btn btn-default btn-xs" type="button" disabled="disabled" >
+                &nbsp;&nbsp;Página 0 de 0&nbsp;&nbsp; 
+            </button>
+
+            <button class="btn btn-default btn-xs " type="button" disabled="disabled" >
+                Próximo <span class="glyphicon glyphicon-step-forward"></span> 
+            </button>
+            <button class="btn btn-default btn-xs " type="button" disabled="disabled" >
+                Último <span class="glyphicon glyphicon-fast-forward"></span> 
+            </button>
+
+        </div>
+    </div>
+
+<table id="listaDados" cellpadding="0" cellspacing="0" width="99%" border="0" class="table table-condensed" align="center">
+
+    <thead>
+        <tr class="titulosListaDados">
+            <th class="listViewThS1" width="10" align="center">
+                Erro
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+          <tr class="linha1ListaDados" >
+
+            <td>
+<pre>
+
+<? if ( $debug ) : ?>
+<div style="padding-left:30px;">
+<strong style="font-size:1.5em;">Erro</strong>
+<?=$errorMessage?>
+
+<?=ModelAbstract::dumpQueries()?>
+
+<hr style="border:1px solid #aaa;" />
+<strong style="font-size:1.5em;">Error Tracing</strong>
+<?=$errorDetail?>
+
+<? else : ?>
+<div style="padding-left:30px;">
+<strong style="font-size:1.5em;">Erro</strong>
+<?=$errorMessage?>
+</div>
+
+<? endif ?>
+
+</pre>
+
+                
+            </td>
+        </tr>
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td align="right">
+                Total: 0 resultados 
+            </td>
+        </tr>
+    </tfoot>
+</table>
