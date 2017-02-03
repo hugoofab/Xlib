@@ -59,54 +59,54 @@ if ( !function_exists ( "pr" ) ) {
     }
 
     function _pr ( $varList = "" , $foreground = "#0F0" , $background = "#000" , $backTrace = false ) {
-
-        if ( !defined ( 'DEBUG' ) || DEBUG === false ) return ;
-
-        if ( $backTrace === false ) $backTrace = debug_backtrace ();
-
-        $options = array(
-            'File' => $backTrace[0]['file'] ,
-            'Line' => $backTrace[0]['line']
-        );
-
-        $file = $options['File'];
-        $line = $options['Line'];
-        $type = strtolower($type);
-
-		$id = md5 ( print_r ( $varList , true ) . rand ( 0 , 100 ) ) ;
-
-		if ( !empty ( $varList ) ) {
-
-			foreach ( $varList as $var ) {
-
-				echo "<pre id=\"$id\" class='hf_debug' style=\"font-size:12px;line-height:1em;background:${background};color:${foreground};position:relative;z-index:99999;filter:alpha(opacity=80); -moz-opacity:0.80; opacity:0.80;font-family:courier new;white-space: pre-wrap;\">Type: " . gettype ( $var ) . "\n" ;
-
-				if ( gettype ( $var ) == 'boolean' ) {
-		            echo ( $var ) ? "TRUE" : "FALSE" ;
-				} else {
-					print_r ( $var );
-				}
-
-		        echo "<hr>";
-
-			}
-
-		} else {
-			echo "<pre id=\"$id\" class='hf_debug' style=\"font-size:12px;line-height:1em;background:${background};color:${foreground};position:relative;z-index:99999;filter:alpha(opacity=80); -moz-opacity:0.80; opacity:0.80;font-family:courier new;white-space: pre-wrap;\">\n" ;
+	    
+	    if ( !defined ( 'DEBUG' ) || DEBUG === false ) return ;
+	    if ( $backTrace === false ) $backTrace = debug_backtrace ();
+	    $options = array(
+		'File' => $backTrace[0]['file'] ,
+		'Line' => $backTrace[0]['line']
+	    );
+	    $file = $options['File'];
+	    $line = $options['Line'];
+	    $id = uniqid();// md5 ( print_r ( $varList , true ) . rand ( 0 , 100 ) ) ;
+	    if ( !empty ( $varList ) ) {
+		echo "<pre id=\"$id\" class='hf_debug' style=\"font-size:12px;line-height:1em;background:${background};color:${foreground};position:relative;z-index:99999;filter:alpha(opacity=80); -moz-opacity:0.80; opacity:0.80;font-family:courier new;white-space: pre-wrap;margin:0;margin-bottom:10px;\">\n";
+		foreach ( $varList as $var ) {
+		    echo _getVarDetails($var);
 		}
+	    } else {
+		echo "<pre id=\"$id\" class='hf_debug' style=\"font-size:12px;line-height:1em;background:${background};color:${foreground};position:relative;z-index:99999;filter:alpha(opacity=80); -moz-opacity:0.80; opacity:0.80;font-family:courier new;white-space: pre-wrap;margin:0;margin-bottom:10px;\">\n" ;
+	    }
+	    array_shift ( $backTrace ) ;
+	    $backTrace = array_reverse ( $backTrace );
+	    foreach( $backTrace as $key => $bt ) {
+		$outArg = [];
+		foreach ( $bt['args'] as &$arg ) {
+		    if ( gettype ( $arg ) === 'object' ) {
+			$outArg[] = "Object:" . get_class($arg) ;
+		    } else if ( gettype ( $arg ) === 'boolean' ) {
+			$outArg[] = $arg ? "Bool:TRUE":"Bool:FALSE";
+		    } else {
+			$outArg[] = ucwords(gettype($arg)).":".$arg ;
+		    }
+		}
+		$implode = @implode ( "] , [" , $outArg ) ;
+		$function = $bt['function'] . " ( [" . $implode . "] ) " ;
+		echo "\n<span style=\"margin-top:3px;padding-left:4px;background:#070;color:#000;font-weight:bold;\">" . $bt['file'] . ":" . $bt['line'] . "&nbsp;</span> -&gt;" . $function ;
+	    }
+	    echo "\n<span style=\"margin-bottom:10px;padding-left:4px;background:#0F0;color:#000;font-weight:bold;line-height:1.5em;\">" . $file . ":" . $line . "&nbsp;&nbsp;&nbsp;<a style=\"color:#FFF;background:#000;padding-left:5px;\" onclick=\"document.getElementById('$id').innerHTML=''\" href=\"javascript:;\">fechar este &nbsp;&nbsp;</a><a onclick=\"$('.hf_debug').hide()\" style=\"color:#FFF;background:#000;padding-left:5px;\" href=\"javascript:;\">fechar todos</a></span></pre>" ;
+	}
 
-        array_shift ( $backTrace ) ;
-        $backTrace = array_reverse ( $backTrace );
-
-        foreach( $backTrace as $key => $bt ) {
-        	foreach ( $bt['args'] as &$arg ) if ( gettype ( $arg ) === 'object' ) $arg = "Object of " . get_class($arg) ;
-        	$implode = @implode ( "] , [" , $bt['args'] ) ;
-            $function = $bt['function'] . " ( [" . $implode . "] ) " ;
-            echo "\n<span style=\"margin-top:3px;padding-left:4px;background:#070;color:#000;font-weight:bold;\">" . $bt['file'] . ":" . $bt['line'] . "&nbsp;</span> -&gt;" . $function ;
-        }
-		echo "\n<span style=\"margin-top:3px;padding-left:4px;background:#0F0;color:#000;font-weight:bold;line-height:1.5em;\">" . $file . ":" . $line . "&nbsp;&nbsp;&nbsp;<a style=\"color:#FFF;background:#000;padding-left:5px;\" onclick=\"document.getElementById('$id').innerHTML=''\" href=\"javascript:;\">fechar este &nbsp;&nbsp;</a><a onclick=\"$('.hf_debug').hide()\" style=\"color:#FFF;background:#000;padding-left:5px;\" href=\"javascript:;\">fechar todos</a></span></pre>" ;
-
-    }
+	function _getVarDetails ( $mixedVar ) {
+	    $output = "Type: " . gettype ( $mixedVar ) . "\n" ;
+	    if ( gettype ( $mixedVar ) == 'boolean' ) {
+		$output .= ( $mixedVar ) ? "TRUE" : "FALSE" ;
+	    } else {
+		$output .= print_r ( $mixedVar , true );
+	    }
+	    $output .= "<hr>";
+	    return $output ;
+	}
 
 }
 
