@@ -30,7 +30,15 @@ class Xlib_Response {
     }
 
     public function __toString (  ) {
+	
+	// para evitar problemas de encoding, pode-se fazer um utf8_encode ma mensagem ou dados da saida
+	header("Content-Type:application/json; charset=utf-8");
 
+        if ( isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') ) {
+            ini_set('zlib.output_compression', 'on');
+            header('Content-Encoding:gzip');
+        }
+	    
         $response = array (
             'STATUS'    => $this->status ,
             'MESSAGE'   => $this->message ,
