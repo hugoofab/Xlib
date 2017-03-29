@@ -39,7 +39,7 @@ class Xlib_Json {
             return '[' . join ( ',' , $result ) . ']' ;
         } else {
             foreach ( $array as $k => $v )
-                $result[] = Xlib_Json::encode ( $k ) . ':' . Xlib_Json::encode ( $v ) ;
+                $result[] = Xlib_Json::encode ( "$k" ) . ':' . Xlib_Json::encode ( $v ) ;
             return '{' . join ( ',' , $result ) . '}' ;
         }
     }
