@@ -1,4 +1,4 @@
-1<?php
+<?php
 
 class Xlib_XListaDados_XButton {
 	
