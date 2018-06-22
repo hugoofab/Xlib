@@ -62,7 +62,7 @@ class Xlib_XListaDados_XButton {
         $output = 
             "<button $attributeSetString>" .
                 "<span class=\"".$this->iconClass."\" ></span> " .
-                $this->label ;
+                $this->label .
             "</button>"
         ;
             
